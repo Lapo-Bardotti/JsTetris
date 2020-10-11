@@ -1,5 +1,5 @@
 # JsTetris
 
-O código original foi retirado do perfil CodeExplained. Foi adaptado pelo professor Gilson Filho, e recebeu diversas adições de minha autoria.
+O código original foi retirado do perfil CodeExplained. Foi adaptado pelo professor Gilson Filho, e recebeu pequenas alterações minhas.
 
-Para rodar, salve a pasta MeuTetris e rode o arquivo "index.html".
+Não está pronto, esse é só um protótipo.
