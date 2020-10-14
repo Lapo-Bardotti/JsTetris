@@ -1,7 +1,7 @@
 /*
-   Jogo: Tetris
-   Autor: Code Explained (www.codeexplained.org)
-   Adaptado por: Gilson Filho
+Jogo: Tetris
+Autor: Code Explained (www.codeexplained.org)
+Adaptado por: Gilson Filho
 */
 
 // Rotina principal
@@ -192,6 +192,7 @@ var py = 0;
 var score = 0;
 var scoreAux = 0;
 var linhaCont = 0;
+var linhaTot = 0;
 var nivel = 1;
 var intervalo = 800;
 
@@ -204,13 +205,13 @@ var fimDeJogo = false;
 var tela = document.getElementById("tela");
 var c = tela.getContext("2d");
 
-var linhaSom = new Audio("linha.wav");
-var derrotaSom = new Audio("derrota.mp3");
-var musicaSom = new Audio("sound.mp3");
-var travaSom = new Audio("trava.wav");
-var mov = new Audio("mov.wav");
-var giro = new Audio("giro.wav");
-var descer = new Audio("descer.wav");
+var musica = new Audio("sons/sound.mp3");
+var linhaSom = new Audio("sons/linha.wav");
+var derrotaSom = new Audio("sons/derrota.mp3");
+var travaSom = new Audio("sons/trava.wav");
+var mov = new Audio("sons/mov.wav");
+var giro = new Audio("sons/giro.wav");
+var descer = new Audio("sons/descer.wav");
 
 onkeydown = controlarPeca;
 
@@ -231,7 +232,7 @@ descerPeca();
 // Sub-rotinas (funções)
 
 function gerarParede(){
-   
+
     px = 190;
     py = 0;
 
@@ -309,6 +310,8 @@ function desenharQuadrado(x, y, cor){
 
 function gerarPeca2(){
     
+    //Não vai ser utilizada nessa versão.
+
     if(r == 0){
         //z
         desenhar(440,280,7,"green");
@@ -357,6 +360,7 @@ function gerarPeca2(){
 }
 
 function gerarPeca(){
+
     var r = Math.floor(Math.random() * PECAS.length);
 
     pontuacaoTela();
@@ -394,6 +398,7 @@ function gerarPeca(){
 }
 
 function descerPeca(){
+
     var agora = Date.now();
     var delta = agora - inicioDescida;
 	
@@ -408,7 +413,10 @@ function descerPeca(){
 }
 
 function moverAbaixo(){
-    if (!colisao(0, 1, peca.tetraminoAtivo)) {
+
+    if (fimDeJogo == true){
+        peca.y = -500;
+    } else if (!colisao(0, 1, peca.tetraminoAtivo)) {
         apagarPeca();
         peca.y++;
         pontuacaoTela();
@@ -422,6 +430,7 @@ function moverAbaixo(){
 }
 
 function moverDireita(){
+
     if (!colisao(1, 0, peca.tetraminoAtivo)) {
         apagarPeca();
         peca.x++;
@@ -431,6 +440,7 @@ function moverDireita(){
 }
 
 function moverEsquerda(){
+
     if (!colisao(-1, 0, peca.tetraminoAtivo)) {
         apagarPeca();
         peca.x--;
@@ -440,6 +450,7 @@ function moverEsquerda(){
 }
 
 function colisao(x, y, p){
+    
     for (var i = 0; i < p.length; i++) {
         for (var j = 0; j < p.length; j++) {
             if (!p[i][j]) {
@@ -494,9 +505,12 @@ function travarPeca(){
             if (peca.y + i < 0) {
                 Fim();
                 desenharStats(); 
+                pause();
                 derrotaSom.play();
                 fimDeJogo = true;
-                break;
+                if(fimDeJogo == true){
+                    break;
+                }
             }
 
             tabuleiro[peca.y+i][peca.x+j] = peca.cor;
@@ -512,6 +526,7 @@ function travarPeca(){
 		
         if (linhaCheia) {
             linhaCont++;
+            linhaTot++;
             scoreAux += 100;
                 if (linhaCont == 10){
                     nivel += 1;
@@ -608,8 +623,6 @@ function controlarPeca(evento){
         moverAbaixo();
         score += 1;
         descer.play();
-    //} else if (tecla == 90){
-    //    rodarPeca2();
     }
 }
 
@@ -623,20 +636,31 @@ function CONTROL(event){
 
 function Fim(){
     Final = new Image();
-    Final.src = "Fim.png";
+    Final.src = "imagens/Fim.png";
     Final.onload = function(){
         c.drawImage(Final, 190, 0);
     }   
 }
 
+
+
 function apendice(){
     telaRanking();
     telaRinve();
+    start();
+}
+
+function start(){
+    musica.play();
+}
+
+function pause(){
+    musica.pause();
 }
 
 function telaRanking(){
     ranking = new Image();
-    ranking.src = "ranking.png";
+    ranking.src = "imagens/ranking.png";
     ranking.onload = function(){
         c.drawImage(ranking, 0, 0);
     }
@@ -644,7 +668,7 @@ function telaRanking(){
 
 function telaRinve(){
     rinve = new Image();
-    rinve.src = "rinve.png";
+    rinve.src = "imagens/rinve.png";
     rinve.onload = function(){
         c.drawImage(rinve, 381, 0);
     }
@@ -780,6 +804,5 @@ function desenhar(tx,ty,tt,cor){
     c.strokeRect(tx,ty,tt,tt);
 }
 
-function quedaForte(){
 
-}
+//Ainda não está completo. Existem mais funções a serem implementadas.
